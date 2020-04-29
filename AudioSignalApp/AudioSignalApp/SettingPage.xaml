@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:XamlMvvm"
+             mc:Ignorable="d"
+             Title="Einstellungen"
+             x:Class="AudioSignalApp.SettingPage">
+
+    <ContentPage.BindingContext>
+        <local:SettingViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout BackgroundColor="{DynamicResource AppBackgroundColor}" >
+
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="U/min-Faktor:"
+                           Style="{DynamicResource AppColorStyleLabel}"
+                           VerticalOptions="Center" />
+                    <Entry Text="{Binding UminFaktor}"
+                           Style="{DynamicResource AppColorStyleLabel}"
+                           Keyboard="Numeric"
+                           HorizontalOptions="FillAndExpand"
+                           VerticalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" >
+                    <CheckBox x:Name="IsUminVisibleCheckbox"
+                              IsChecked="{Binding IsUminVisible, Mode=TwoWay}"
+                              VerticalOptions="Center"/>
+                    <Label Text="U/min anzeigen"
+                           Style="{DynamicResource AppColorStyleLabel}"
+                           VerticalOptions="Center" >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="IsUminVisibleTap" 
+                                                  NumberOfTapsRequired="1" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" >
+                    <CheckBox x:Name="IsAudioSignalVisibleCheckbox"
+                              IsChecked="{Binding IsAudioSignalVisible, Mode=TwoWay}"
+                              VerticalOptions="Center"/>
+                    <Label Text="Audiosignal anzeigen"
+                           Style="{DynamicResource AppColorStyleLabel}"
+                           VerticalOptions="Center" >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="IsAudioSignalVisibleTap" 
+                                                  NumberOfTapsRequired="1" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" >
+                    <CheckBox x:Name="IsSpektrogrammVisibleCheckbox" IsChecked="{Binding IsSpektrogrammVisible, Mode=TwoWay}"
+                              VerticalOptions="Center"/>
+                    <Label Text="Spektrogramm anzeigen"
+                           Style="{DynamicResource AppColorStyleLabel}"
+                           VerticalOptions="Center" >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="IsSpektrogrammVisibleTap" 
+                                                  NumberOfTapsRequired="1" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Farbdesign"
+                           Style="{DynamicResource AppColorStyleLabel}" />
+                    <Picker Style="{DynamicResource AppColorStylePicker}"
+                            ItemsSource="{Binding ThemeSelectionList}"
+                            HorizontalOptions="FillAndExpand"
+                            SelectedIndexChanged="Picker_SelectedIndexChanged"
+                            SelectedIndex="{Binding SelectedTheme}" />
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Leistungsspektrum verwenden"
+                           Style="{DynamicResource AppColorStyleLabel}" />
+                    <Switch IsToggled="{Binding Leistungsspektrum}" />
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="Frequenz- auflösung:"
+                           Style="{DynamicResource AppColorStyleLabel}"
+                           VerticalOptions="Center" />
+                    <Stepper x:Name="FrequenzAufloesungInHzStepper"
+                             Minimum="1"
+                             Maximum="10"
+                             Increment="1"
+                             Value="{Binding FrequenzAufloesungInHz}"
+                             HorizontalOptions="Center" />
+                    <Label Text="{Binding Source={x:Reference FrequenzAufloesungInHzStepper}, Path=Value, StringFormat='{0} Hz'}"
+                           Style="{DynamicResource AppColorStyleLabel}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand" />
+                </StackLayout>
+
+                <!--<StackLayout Orientation="Horizontal" >
+                    <Button Text="Reset"
+                            Command="{Binding ResetCommand}"
+                            VerticalOptions="Center" />
+                </StackLayout>-->
+
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

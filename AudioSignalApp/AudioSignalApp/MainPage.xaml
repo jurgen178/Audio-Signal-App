@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:XamlMvvm"
+             mc:Ignorable="d"
+             Title="Audio Signal App"
+             x:Class="AudioSignalApp.MainPage" >
+
+    <ContentPage.BindingContext>
+        <local:MainPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="setting.png" Order="Primary" Command="{Binding SettingCommand}" />
+        <ToolbarItem Text="Einstellungen zurücksetzen" Order="Secondary" Command="{Binding ResetCommand}" />
+        <ToolbarItem Text="About" Order="Secondary" Command="{Binding AboutCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout BackgroundColor="{DynamicResource AppBackgroundColor}">
+        
+        <ImageButton Source="{Binding StartStopImage}"
+                     Command="{Binding StartStopCommand}"
+                     WidthRequest="50"
+                     HeightRequest="50"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center" >
+        </ImageButton>
+
+        <!--https://devblogs.microsoft.com/xamarin/embedded-fonts-xamarin-forms/-->
+        <StackLayout x:Name="UminCanvasView">
+            <Label x:Name="UminText"
+                   Style="{DynamicResource AppColorStyleLabel}"
+                   FontFamily="FixedWidthFont"
+                   HorizontalTextAlignment="Center"
+                   FontSize="48" />
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal"
+                     HorizontalOptions="FillAndExpand" >
+            <Label Text="fₛ"
+                   Style="{DynamicResource AppColorStyleLabel}" />
+            <Slider Maximum="22050"
+                    Minimum="4000"
+                    Value="{Binding SampleRateInHz}"
+                    HorizontalOptions="FillAndExpand"/>
+            <Entry Text="{Binding SampleRateInHzWert}"
+                   Style="{DynamicResource AppColorStyleLabel}"
+                   Keyboard="Numeric"
+                   WidthRequest="120"
+                   ReturnCommand="{Binding SampleRateInHzCommand}" />
+        </StackLayout>
+
+        <StackLayout x:Name="signalViews"
+                     VerticalOptions="FillAndExpand"
+                     HorizontalOptions="FillAndExpand" >
+            <skia:SKCanvasView x:Name="fftSignalCanvasView"
+                               PaintSurface="fftSignalPaint"
+                               Touch="fftSignalTouch"
+                               EnableTouchEvents="True"
+                               VerticalOptions="FillAndExpand"
+                               HorizontalOptions="FillAndExpand" >
+                <skia:SKCanvasView.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="fftSignalPan" />
+                    <TapGestureRecognizer Tapped="fftSignalTap" 
+                                          NumberOfTapsRequired="2" />
+                </skia:SKCanvasView.GestureRecognizers>
+            </skia:SKCanvasView>
+            <skia:SKCanvasView x:Name="audioSignalCanvasView"
+                               PaintSurface="AudioSignalPaint"
+                               VerticalOptions="FillAndExpand"
+                               HorizontalOptions="FillAndExpand" />
+            <skia:SKCanvasView x:Name="spektrogrammSignalCanvasView"
+                               PaintSurface="spektrogrammSignalPaint"
+                               VerticalOptions="FillAndExpand"
+                               HorizontalOptions="FillAndExpand" >
+                <skia:SKCanvasView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="spektrogrammSignalTap" 
+                                          NumberOfTapsRequired="2" />
+                </skia:SKCanvasView.GestureRecognizers>
+            </skia:SKCanvasView>
+        </StackLayout>
+        
+    </StackLayout>
+</ContentPage>
