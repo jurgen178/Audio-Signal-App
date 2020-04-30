@@ -148,7 +148,7 @@ namespace XamlMvvm
 
             set
             {
-                int sampleRateInHz = Math.Min(Math.Max(value, 4000), 22050);
+                int sampleRateInHz = (value > 22050) ? 11025 : ((value < 4000) ? 11025 : value);
                 sampleRateInHz = sampleRateInHz % 11025 == 0 ? sampleRateInHz : sampleRateInHz / 100 * 100;
                 Preferences.Set($"{PreferenceName.SampleRateInHz}", sampleRateInHz);
                 this.OnPropertyChanged(nameof(this.SampleRateInHz));

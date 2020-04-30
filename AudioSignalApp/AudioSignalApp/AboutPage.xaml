@@ -26,9 +26,8 @@ Audio Signal App sucht die stärkste Frequenzkomponente in einem Audiosignal und
                         </Span>
                         <Span Text="&#x0a;" />
                         <Span Text="&#x0a;" />
-                        <Span Text="Source code " />
                         <local:HyperlinkSpan Text="github"
-                                             Url="https://github.com/alexeidt" />
+                                             Url="https://github.com/AlexEidt/Audio-Signal-App" />
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
