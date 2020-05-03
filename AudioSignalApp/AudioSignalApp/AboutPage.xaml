@@ -31,6 +31,10 @@ Audio Signal App sucht die stärkste Frequenzkomponente in einem Audiosignal und
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
+            <Image Source="icon.png"/>
+            <Label Text="Version 1" 
+                   FontSize="Small"
+                   HorizontalOptions="Center" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
