@@ -121,6 +121,7 @@ namespace AudioSignalApp
 
                         *ptr = (uint)SKColor.FromHsl(fftWert * 360 / m, 75, 50);
 
+                        // Cursorline.
                         if (x >= 2)
                         {
                             uint* ptrCursor = ptr;

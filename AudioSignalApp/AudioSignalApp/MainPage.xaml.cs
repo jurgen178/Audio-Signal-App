@@ -21,25 +21,54 @@ namespace AudioSignalApp
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
-        //public static bool RecordEnabled = true;
-        //public static bool IsCurrentSystemThemeDark = true;
-        //public static int SampleRateInHz = Preferences.Get($"{PreferenceName.SampleRateInHz}", 11025);
-        //public static int UminFaktor = Preferences.Get($"{PreferenceName.UminFaktor}", 2);
-        //public static bool IsUminVisible = Preferences.Get($"{PreferenceName.IsUminVisible}", false);
-        //public static bool IsAudioSignalVisible = Preferences.Get($"{PreferenceName.IsAudioSignalVisible}", true);
-        //public static bool IsSpektrogrammVisible = Preferences.Get($"{PreferenceName.IsSpektrogrammVisible}", true);
-        //public static SelectedThemeEnum SelectedTheme = (SelectedThemeEnum)Preferences.Get($"{PreferenceName.SelectedTheme}", (int)SelectedThemeEnum.Auto);
-        //public static bool Leistungsspektrum = Preferences.Get($"{PreferenceName.Leistungsspektrum}", true);
-        //public static int FrequenzAufloesung = Preferences.Get($"{PreferenceName.FrequenzAufloesungInHz}", 5);
+        /// <summary>
+        /// Stop recording.
+        /// </summary>
         public static bool RecordEnabled;
+
+        /// <summary>
+        /// Is current system theme dark.
+        /// </summary>
         public static bool IsCurrentSystemThemeDark;
+
+        /// <summary>
+        /// The sample rate in Hz.
+        /// </summary>
         public static int SampleRateInHz;
+
+        /// <summary>
+        /// The umin faktor.
+        /// </summary>
         public static int UminFaktor;
+
+        /// <summary>
+        /// Is umin visible.
+        /// </summary>
         public static bool IsUminVisible;
+
+        /// <summary>
+        /// Is audio signal visible.
+        /// </summary>
         public static bool IsAudioSignalVisible;
+
+        /// <summary>
+        /// Is spektrogramm visible.
+        /// </summary>
         public static bool IsSpektrogrammVisible;
+
+        /// <summary>
+        /// The selected theme.
+        /// </summary>
         public static SelectedThemeEnum SelectedTheme;
+
+        /// <summary>
+        /// Display Leistungsspektrum.
+        /// </summary>
         public static bool Leistungsspektrum;
+
+        /// <summary>
+        /// Frequenzaufloesung.
+        /// </summary>
         public static int FrequenzAufloesung;
 
         /// <summary>
@@ -50,8 +79,8 @@ namespace AudioSignalApp
             RecordEnabled = true;
             IsCurrentSystemThemeDark = true;
             SampleRateInHz = Preferences.Get($"{PreferenceName.SampleRateInHz}", 11025);
-            UminFaktor = Preferences.Get($"{PreferenceName.UminFaktor}", 2);
-            IsUminVisible = Preferences.Get($"{PreferenceName.IsUminVisible}", false);
+            UminFaktor = Preferences.Get($"{PreferenceName.UminFaktor}", 4);
+            IsUminVisible = Preferences.Get($"{PreferenceName.IsUminVisible}", true);
             IsAudioSignalVisible = Preferences.Get($"{PreferenceName.IsAudioSignalVisible}", true);
             IsSpektrogrammVisible = Preferences.Get($"{PreferenceName.IsSpektrogrammVisible}", true);
             SelectedTheme = (SelectedThemeEnum)Preferences.Get($"{PreferenceName.SelectedTheme}", (int)SelectedThemeEnum.Auto);
@@ -71,7 +100,6 @@ namespace AudioSignalApp
         private int requestedFrequenzAufloesung = -1;
         private bool validData = false;
         private string errorMsg = string.Empty;
-        private Stopwatch stopwatch = new Stopwatch();
 
         private SKPaint filterRect = new SKPaint
         {
@@ -107,7 +135,7 @@ namespace AudioSignalApp
             IsAntialias = true,
         };
 
-        private SKPaint fftMaxRect = new SKPaint
+        private SKPaint freqMaxRect = new SKPaint
         {
         };
 
@@ -146,6 +174,7 @@ namespace AudioSignalApp
             InitializeSettings();
             this.InitializeComponent();
 
+            // Update UI every 100ms.
             Device.StartTimer(TimeSpan.FromSeconds(1 / 10f), () =>
             {
                 this.fftSignalCanvasView.InvalidateSurface();
@@ -176,6 +205,7 @@ namespace AudioSignalApp
 
             this.GetAudioPermissionAsync().ConfigureAwait(true);
 
+            // Backgroundthread processing the audio signal.
             Task.Run(() =>
             {
                 while (true)
@@ -272,6 +302,7 @@ namespace AudioSignalApp
         /// <summary>
         /// Gets the audio permission asynchronous.
         /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task GetAudioPermissionAsync()
         {
             var status = await this.CheckAndRequestPermissionAsync(new Permissions.Microphone());
@@ -285,7 +316,7 @@ namespace AudioSignalApp
         /// <summary>
         /// Checks the and request permission asynchronous.
         /// </summary>
-        /// <typeparam name="T">T</typeparam>
+        /// <typeparam name="T">T.</typeparam>
         /// <param name="permission">The permission.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task<PermissionStatus> CheckAndRequestPermissionAsync<T>(T permission)
@@ -373,7 +404,7 @@ namespace AudioSignalApp
                     AudioSource.Mic, // Hardware source of recording.
                     SampleRateInHz, // Frequency
                     ChannelIn.Mono, // Mono or stereo
-                    Android.Media.Encoding.Pcm16bit, // Audio encoding
+                    Encoding.Pcm16bit, // Audio encoding
                     this.N); // Length of the audio clip.
 
                 if (this.audioRecord.State == State.Uninitialized)
@@ -414,7 +445,7 @@ namespace AudioSignalApp
         }
 
         /// <summary>
-        /// Gets the buffer maximum value.
+        /// Gets the maximum value in the buffer.
         /// </summary>
         /// <param name="m">The m.</param>
         /// <param name="buffer">The buffer.</param>
@@ -434,7 +465,7 @@ namespace AudioSignalApp
         }
 
         /// <summary>
-        /// Gets the buffer maximum value.
+        /// Gets the maximum value in the buffer.
         /// </summary>
         /// <param name="m">The m.</param>
         /// <param name="buffer">The buffer.</param>

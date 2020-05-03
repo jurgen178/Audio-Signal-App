@@ -42,7 +42,6 @@ namespace XamlMvvm
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
-        /// <returns></returns>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>

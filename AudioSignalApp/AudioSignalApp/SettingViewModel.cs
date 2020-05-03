@@ -10,7 +10,6 @@ namespace XamlMvvm
     using System.Runtime.CompilerServices;
     using AudioSignalApp;
     using Xamarin.Essentials;
-    using Xamarin.Forms;
 
     /// <summary>
     /// SettingViewModel.
@@ -28,7 +27,6 @@ namespace XamlMvvm
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
-        /// <returns></returns>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -86,7 +84,7 @@ namespace XamlMvvm
         /// </value>
         public bool IsUminVisible
         {
-            get => Preferences.Get($"{PreferenceName.IsUminVisible}", false);
+            get => Preferences.Get($"{PreferenceName.IsUminVisible}", true);
             set
             {
                 Preferences.Set($"{PreferenceName.IsUminVisible}", value);

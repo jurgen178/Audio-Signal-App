@@ -8,7 +8,7 @@
     <Color x:Key="fftSignalBackgroundColor">Black</Color>
     <Color x:Key="fftSignalLinesColor">Gray</Color>
     <Color x:Key="fftSignalColor">White</Color>
-    <Color x:Key="fftMaxColor">Green</Color>
+    <Color x:Key="freqMaxColor">Green</Color>
     <Color x:Key="fftFreqTextColor">Yellow</Color>
     <Color x:Key="fftFilterRectColor">#40ffffff</Color>
     <Color x:Key="spektrogrammBackgroundColor">Black</Color>
