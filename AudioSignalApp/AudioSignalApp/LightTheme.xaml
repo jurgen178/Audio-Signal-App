@@ -8,7 +8,7 @@
     <Color x:Key="fftSignalBackgroundColor">Azure</Color>
     <Color x:Key="fftSignalLinesColor">DarkGray</Color>
     <Color x:Key="fftSignalColor">Black</Color>
-    <Color x:Key="fftMaxColor">LightGreen</Color>
+    <Color x:Key="freqMaxColor">LightGreen</Color>
     <Color x:Key="fftFreqTextColor">DarkBlue</Color>
     <Color x:Key="fftFilterRectColor">#30000000</Color>
     <Color x:Key="spektrogrammBackgroundColor">Azure</Color>

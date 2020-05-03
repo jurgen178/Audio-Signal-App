@@ -12,6 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="ViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\fonts\AurulentSansMono-Regular.otf" />
     <None Remove="stylecop.json" />
   </ItemGroup>
@@ -37,7 +43,6 @@
 
   <ItemGroup>
     <Folder Include="Enums\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>

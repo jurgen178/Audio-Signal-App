@@ -18,7 +18,7 @@ namespace AudioSignalApp
     /// <seealso cref="Xamarin.Forms.ContentPage" />
     public partial class MainPage : ContentPage
     {
-        private int fftMax = 0;
+        private int freqMax = 0;
 
         private double panStartX1 = 0;
         private double panX1 = 0;
@@ -226,10 +226,10 @@ namespace AudioSignalApp
 
             this.fftSignalLines.Color = this.GetThemeColor("fftSignalLinesColor");
             this.fftSignal.Color = this.GetThemeColor("fftSignalColor");
-            this.fftMaxRect.Color = this.GetThemeColor("fftMaxColor");
+            this.freqMaxRect.Color = this.GetThemeColor("freqMaxColor");
             this.fftFreqText.Color = this.GetThemeColor("fftFreqTextColor");
             this.filterRect.Color = this.GetThemeColor("fftFilterRectColor");
-            this.fftMaxRect.BlendMode = (string)App.Current.Resources["Theme"] == "Dark" ? SKBlendMode.Darken : this.fftMaxRect.BlendMode = SKBlendMode.Lighten;
+            this.freqMaxRect.BlendMode = (string)App.Current.Resources["Theme"] == "Dark" ? SKBlendMode.Darken : this.freqMaxRect.BlendMode = SKBlendMode.Lighten;
 
             int[] fftBufferCopy;
             lock (this.fftLock)
@@ -284,14 +284,16 @@ namespace AudioSignalApp
 
             // Debug
             // canvas.DrawText($"{(int)panX1}", drawRect.MidX, drawRect.MidY, this.debug);
-            int l = 1;
+
+            // Log grid lines.
+            int l = 10;
             for (int l10 = 0; l10 < (int)(logN + 1); l10++)
             {
                 for (int l1 = 0; l1 < 10; l1++)
                 {
                     int f = l * l1;
                     float f1 = (float)f * 2 * N2 / SampleRateInHz;
-                    float ll1 = f == 0 ? 0 : (float)((1 + Math.Log10(f1)) / logScale);
+                    float ll1 = f == 0 ? 0 : (float)(Math.Log10(f1) / logScale);
                     float x0 = drawRect.Left + 1 + (ll1 * drawRect.Width / N2);
 
                     canvas.DrawLine(x0, drawRect.Top, x0, drawRect.Bottom, this.fftSignalLines);
@@ -300,7 +302,7 @@ namespace AudioSignalApp
                     path.MoveTo(x0, y0 - 100);
                     path.LineTo(x0, y0 - 500);
 
-                    canvas.DrawTextOnPath($"{f * 10} Hz", path, 0, 0, this.fftFreqText);
+                    canvas.DrawTextOnPath($"{f} Hz", path, 0, 0, this.fftFreqText);
                 }
 
                 l *= 10;
@@ -309,8 +311,9 @@ namespace AudioSignalApp
             float y2 = y0;
             float x2 = drawRect.Left + 1;
 
+            // FFT signal.
             int maxValue = -1;
-            float fftMaxX = -1;
+            float freqMaxX = -1;
             for (int k = 0; k < N2; k++)
             {
                 float x0 = drawRect.Left + 1 + (k * drawRect.Width / N2);
@@ -319,8 +322,10 @@ namespace AudioSignalApp
                 int fftWert;
                 if (x0 > this.panX1 && x0 < this.panX2)
                 {
+                    // Linearen Bereich 0..N2 auf log Darstellung.
                     logIndex = (int)Math.Pow(10, k * logScale);
-                    fftWert = fftBufferCopy[logIndex >= 0 ? (logIndex < N2 ? logIndex : (N2 - 1)) : 0];
+                    logIndex = logIndex >= 0 ? (logIndex < N2 ? logIndex : (N2 - 1)) : 0;
+                    fftWert = fftBufferCopy[logIndex];
                 }
                 else
                 {
@@ -335,17 +340,18 @@ namespace AudioSignalApp
                 if (fftWert > maxValue)
                 {
                     maxValue = fftWert;
-                    fftMaxX = x0;
-                    this.fftMax = (int)(logIndex * SampleRateInHz / 2 / (float)N2);
+                    freqMaxX = x0;
+                    this.freqMax = (int)(logIndex * SampleRateInHz / 2 / (float)N2);
                 }
 
                 x2 = x0;
             }
 
-            if (fftMaxX > 0)
+            // Draw max freq rect.
+            if (freqMaxX > 0)
             {
                 float rectWidth = 40;
-                canvas.DrawRect(fftMaxX - (rectWidth / 2), drawRect.Top, rectWidth, drawRect.Height, this.fftMaxRect);
+                canvas.DrawRect(freqMaxX - (rectWidth / 2), drawRect.Top, rectWidth, drawRect.Height, this.freqMaxRect);
             }
 
             void SetText(string text, float textY)
@@ -355,8 +361,8 @@ namespace AudioSignalApp
                 canvas.DrawText(text, textX, textY, this.zaehler);
             }
 
-            SetText($"{this.fftMax} Hz", drawRect.Top + this.zaehler.TextSize);
-            string uminStr = $"{this.fftMax * UminFaktor} U/min";
+            SetText($"{this.freqMax} Hz", drawRect.Top + this.zaehler.TextSize);
+            string uminStr = $"{this.freqMax * UminFaktor} U/min";
             int uminStrLen = uminStr.Length;
             int refUminStrLen = "12345 U/min".Length;
 
