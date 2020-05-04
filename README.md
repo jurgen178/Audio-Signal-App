@@ -4,7 +4,7 @@ Audio Signal App sucht die stärkste Frequenzkomponente in einem Audiosignal und
 
 ![](/Documentation/images/icon.png)
 
-Version 1
+Version 2
 
 [Install Android App](/Store/net.thecloudsite.audiosignalapp-Signed.apk)
 
