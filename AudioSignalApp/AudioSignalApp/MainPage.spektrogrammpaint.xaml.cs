@@ -54,8 +54,7 @@ namespace AudioSignalApp
                 fftBufferCopy = (int[])this.fftBuffer.Clone();
             }
 
-            int N2 = fftBufferCopy.Length;
-            int m = this.GetBufferMaxValue(10, fftBufferCopy);
+            int m = this.GetBufferMaxValue(10, fftBufferCopy, drawRect, this.panX1, this.panX2);
 
             if (spektrogrammBitmap == null)
             {
@@ -81,6 +80,7 @@ namespace AudioSignalApp
             {
                 IntPtr pixelsAddr = spektrogrammBitmap.GetPixels();
 
+                int N2 = fftBufferCopy.Length;
                 double logN = Math.Log10(N2);
                 double logScale = logN / N2;
 
@@ -108,9 +108,9 @@ namespace AudioSignalApp
                         int logIndex = 0;
                         int fftWert = 0;
 
-                        if (x0 > this.panX1 && x0 < this.panX2)
+                        if (x0 >= this.panX1 && x0 <= this.panX2)
                         {
-                            logIndex = (int)Math.Pow(10, k * logScale);
+                            logIndex = (int)(Math.Pow(10, k * logScale) - 0.5);
                             fftWert = fftBufferCopy[logIndex >= 0 ? (logIndex < N2 ? logIndex : (N2 - 1)) : 0];
                         }
                         else
