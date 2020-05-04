@@ -464,20 +464,27 @@ namespace AudioSignalApp
             return m + 1;
         }
 
-        /// <summary>
-        /// Gets the maximum value in the buffer.
-        /// </summary>
-        /// <param name="m">The m.</param>
-        /// <param name="buffer">The buffer.</param>
-        /// <returns>Maximum value.</returns>
-        private int GetBufferMaxValue(int m, int[] buffer)
+        private int GetBufferMaxValue(int m, int[] buffer, SKRect drawRect, double panX1, double panX2)
         {
-            for (int x = 0; x < buffer.Length; x++)
+            int N2 = buffer.Length;
+            double logN = Math.Log10(N2);
+            double logScale = logN / N2;
+
+            // Logarithmischen Anzeigewert in linearen Bereich umrechnen.
+            double k1 = (Math.Min(0, panX1) - (drawRect.Left + 1)) * N2 / drawRect.Width;
+            double k2 = (Math.Min(panX2, drawRect.Width) - (drawRect.Left + 1)) * N2 / drawRect.Width;
+            int logIndex1 = (int)(Math.Pow(10, k1 * logScale) - 0.5);
+            int logIndex2 = (int)(Math.Pow(10, k2 * logScale) - 0.5) + 1;
+
+            for (int x = 0; x < N2; x++)
             {
-                int a = Math.Abs(buffer[x]);
-                if (a > m)
+                if (x >= logIndex1 && x < logIndex2)
                 {
-                    m = a;
+                    int a = Math.Abs(buffer[x]);
+                    if (a > m)
+                    {
+                        m = a;
+                    }
                 }
             }
 
