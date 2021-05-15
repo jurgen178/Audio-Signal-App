@@ -49,7 +49,7 @@
             <Entry Text="{Binding SampleRateInHzWert}"
                    Style="{DynamicResource AppColorStyleLabel}"
                    Keyboard="Numeric"
-                   WidthRequest="120"
+                   WidthRequest="140"
                    ReturnCommand="{Binding SampleRateInHzCommand}" />
         </StackLayout>
 

@@ -3,5 +3,6 @@
   <PropertyGroup>
     <SelectedDevice>Google Pixel 3a</SelectedDevice>
     <DefaultDevice>pixel_3a_pie_9_0_-_api_28</DefaultDevice>
+    <ActiveDebugProfile>Google Pixel 3a</ActiveDebugProfile>
   </PropertyGroup>
 </Project>
